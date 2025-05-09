@@ -60,7 +60,7 @@ class _LawyerSignupScreenState extends State<LawyerSignupScreen> {
   //   {'id': 4, 'name': 'Property Law'},
   // ];
 
-  TextEditingController _selectedCasesController = TextEditingController();
+  // TextEditingController _selectedCasesController = TextEditingController();
 
   @override
   void initState() {
@@ -134,57 +134,57 @@ class _LawyerSignupScreenState extends State<LawyerSignupScreen> {
     }
   }
 
-  void _toggleCase(String caseName) {
-    setState(() {
-      if (_data.selectedCaseIds.contains(caseName)) {
-        _data.selectedCaseIds.remove(caseName);
-      } else {
-        _data.selectedCaseIds.add(caseName);
-      }
-    });
-  }
+  // void _toggleCase(String caseName) {
+  //   setState(() {
+  //     if (_data.selectedCaseIds.contains(caseName)) {
+  //       _data.selectedCaseIds.remove(caseName);
+  //     } else {
+  //       _data.selectedCaseIds.add(caseName);
+  //     }
+  //   });
+  // }
 
-  Future<void> _testApi() async {
-    try {
-      print('Testing API endpoint...');
-      final testResponse = await http
-          .get(
-            Uri.parse(
-              'http://mohamek-legel.runasp.net/api/Account/register-as-lawyer',
-            ),
-          )
-          .timeout(Duration(seconds: 10));
+  // Future<void> _testApi() async {
+  //   try {
+  //     print('Testing API endpoint...');
+  //     final testResponse = await http
+  //         .get(
+  //           Uri.parse(
+  //             'http://mohamek-legel.runasp.net/api/Account/register-as-lawyer',
+  //           ),
+  //         )
+  //         .timeout(Duration(seconds: 10));
 
-      print('API Test Response Status: ${testResponse.statusCode}');
-      print('API Test Response Headers: ${testResponse.headers}');
-      print('API Test Response Body: ${testResponse.body}');
+  //     print('API Test Response Status: ${testResponse.statusCode}');
+  //     print('API Test Response Headers: ${testResponse.headers}');
+  //     print('API Test Response Body: ${testResponse.body}');
 
-      if (testResponse.statusCode == 405) {
-        print('API endpoint exists but method not allowed (expected for GET)');
-        return;
-      }
+  //     if (testResponse.statusCode == 405) {
+  //       print('API endpoint exists but method not allowed (expected for GET)');
+  //       return;
+  //     }
 
-      throw Exception('Unexpected response: ${testResponse.statusCode}');
-    } catch (e) {
-      print('API Test Error: $e');
-      rethrow;
-    }
-  }
+  //     throw Exception('Unexpected response: ${testResponse.statusCode}');
+  //   } catch (e) {
+  //     print('API Test Error: $e');
+  //     rethrow;
+  //   }
+  // }
 
   Future<void> _submit() async {
     setState(() => _isLoading = true);
     try {
       // Validate and log all data before submission
-      print('\n=== Validating Registration Data ===');
-      print('Full Name: ${_data.fullName} (${_data.fullName.length} chars)');
-      print('Email: ${_data.email}');
-      print('Phone: ${_data.phoneNumber}');
-      print('SSN: ${_data.ssn}');
-      print('Price: ${_data.priceOfAppointment}');
-      print('SelectedCaseIds list: ${_data.selectedCaseIds}');
-      print('Has Profile Picture: ${_data.picture != null}');
-      print('Has Bar Association Image: ${_data.barAssociationImage != null}');
-      print('==================================\n');
+      // print('\n=== Validating Registration Data ===');
+      // print('Full Name: ${_data.fullName} (${_data.fullName.length} chars)');
+      // print('Email: ${_data.email}');
+      // print('Phone: ${_data.phoneNumber}');
+      // print('SSN: ${_data.ssn}');
+      // print('Price: ${_data.priceOfAppointment}');
+      // print('SelectedCaseIds list: ${_data.selectedCaseIds}');
+      // print('Has Profile Picture: ${_data.picture != null}');
+      // print('Has Bar Association Image: ${_data.barAssociationImage != null}');
+      // print('==================================\n');
 
       // Validate required fields
       if (_data.fullName.isEmpty) throw Exception('Full Name is required');
@@ -250,14 +250,14 @@ class _LawyerSignupScreenState extends State<LawyerSignupScreen> {
       });
 
       // Log the complete request
-      print('\n=== Sending Request ===');
-      print(
-        'URL: ${Uri.parse('http://mohamek-legel.runasp.net/api/Account/register-as-lawyer').toString()}',
-      );
-      print('Method: POST');
-      print('Fields: ${formData.fields}');
-      print('Files: ${formData.files.length}');
-      print('========================\n');
+      // print('\n=== Sending Request ===');
+      // print(
+      //   'URL: ${Uri.parse('http://mohamek-legel.runasp.net/api/Account/register-as-lawyer').toString()}',
+      // );
+      // print('Method: POST');
+      // print('Fields: ${formData.fields}');
+      // print('Files: ${formData.files.length}');
+      // print('========================\n');
 
       // Add timeout to the request
       var streamedResponse = await Dio()
@@ -281,11 +281,11 @@ class _LawyerSignupScreenState extends State<LawyerSignupScreen> {
       setState(() => _isLoading = false);
 
       // Log the response
-      print('\n=== Received Response ===');
-      print('Status Code: ${response.statusCode}');
-      print('Headers: ${response.headers}');
-      print('Body: ${response.data}');
-      print('========================\n');
+      // print('\n=== Received Response ===');
+      // print('Status Code: ${response.statusCode}');
+      // print('Headers: ${response.headers}');
+      // print('Body: ${response.data}');
+      // print('========================\n');
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         showDialog(
@@ -548,7 +548,7 @@ class _LawyerSignupScreenState extends State<LawyerSignupScreen> {
                                   child: IconButton(
                                     icon: Icon(
                                       Icons.arrow_back,
-                                      color: Colors.indigo[900],
+                                      color: Color(0xFF0A2F5E),
                                     ),
                                     onPressed: _previousStep,
                                     tooltip: 'Back',
@@ -602,13 +602,13 @@ class _LawyerSignupScreenState extends State<LawyerSignupScreen> {
           width: isActive ? 36 : 28,
           height: isActive ? 36 : 28,
           decoration: BoxDecoration(
-            color: isActive ? Colors.indigo[900] : Colors.grey[300],
+            color: isActive ? Color(0xFF0A2F5E) : Colors.grey[300],
             shape: BoxShape.circle,
             boxShadow:
                 isActive
                     ? [
                       BoxShadow(
-                        color: Colors.indigo.shade100,
+                        color: Color(0xFF0A2F5E).withOpacity(0.2),
                         blurRadius: 8,
                         offset: Offset(0, 2),
                       ),
@@ -631,7 +631,7 @@ class _LawyerSignupScreenState extends State<LawyerSignupScreen> {
           label,
           style: TextStyle(
             fontSize: 12,
-            color: isActive ? Colors.indigo[900] : Colors.black54,
+            color: isActive ? Color(0xFF0A2F5E) : Colors.black54,
           ),
         ),
       ],
@@ -642,7 +642,7 @@ class _LawyerSignupScreenState extends State<LawyerSignupScreen> {
     return Container(
       width: 40,
       height: 2,
-      color: Colors.indigo[900],
+      color: Color(0xFF0A2F5E),
       margin: EdgeInsets.symmetric(horizontal: 8),
     );
   }
@@ -658,7 +658,7 @@ class _LawyerSignupScreenState extends State<LawyerSignupScreen> {
             style: TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.bold,
-              color: Colors.indigo[900],
+              color: Color(0xFF0A2F5E),
             ),
           ),
           SizedBox(height: 6),
@@ -672,7 +672,7 @@ class _LawyerSignupScreenState extends State<LawyerSignupScreen> {
               children: [
                 CircleAvatar(
                   radius: 54,
-                  backgroundColor: Colors.indigo[50],
+                  backgroundColor: Color(0xFF0A2F5E).withOpacity(0.1),
                   backgroundImage:
                       _data.picture != null ? FileImage(_data.picture!) : null,
                   child:
@@ -680,7 +680,7 @@ class _LawyerSignupScreenState extends State<LawyerSignupScreen> {
                           ? Icon(
                             Icons.person,
                             size: 54,
-                            color: Colors.indigo[200],
+                            color: Color(0xFF0A2F5E).withOpacity(0.3),
                           )
                           : null,
                 ),
@@ -691,11 +691,11 @@ class _LawyerSignupScreenState extends State<LawyerSignupScreen> {
                     onTap: () => _pickImage(true),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.indigo[900],
+                        color: Color(0xFF0A2F5E),
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.indigo.shade100,
+                            color: Color(0xFF0A2F5E).withOpacity(0.2),
                             blurRadius: 8,
                             offset: Offset(0, 2),
                           ),
@@ -806,12 +806,12 @@ class _LawyerSignupScreenState extends State<LawyerSignupScreen> {
             value: _gender,
             decoration: InputDecoration(
               labelText: 'Gender',
-              prefixIcon: Icon(Icons.wc, color: Colors.indigo[900]),
+              prefixIcon: Icon(Icons.wc, color: Color(0xFF0A2F5E)),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
               filled: true,
-              fillColor: Colors.indigo[50],
+              fillColor: Color(0xFF0A2F5E).withOpacity(0.1),
               contentPadding: EdgeInsets.symmetric(
                 vertical: 18,
                 horizontal: 16,
@@ -850,12 +850,12 @@ class _LawyerSignupScreenState extends State<LawyerSignupScreen> {
               child: TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Date of Birth',
-                  prefixIcon: Icon(Icons.cake, color: Colors.indigo[900]),
+                  prefixIcon: Icon(Icons.cake, color: Color(0xFF0A2F5E)),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
                   filled: true,
-                  fillColor: Colors.indigo[50],
+                  fillColor: Color(0xFF0A2F5E).withOpacity(0.1),
                   contentPadding: EdgeInsets.symmetric(
                     vertical: 18,
                     horizontal: 16,
@@ -875,7 +875,7 @@ class _LawyerSignupScreenState extends State<LawyerSignupScreen> {
             width: double.infinity,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.indigo[900],
+                backgroundColor: Color(0xFF0A2F5E),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
@@ -907,10 +907,10 @@ class _LawyerSignupScreenState extends State<LawyerSignupScreen> {
       initialValue: initialValue,
       decoration: InputDecoration(
         labelText: label,
-        prefixIcon: Icon(icon, color: Colors.indigo[900]),
+        prefixIcon: Icon(icon, color: Color(0xFF0A2F5E)),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
         filled: true,
-        fillColor: Colors.indigo[50],
+        fillColor: Color(0xFF0A2F5E).withOpacity(0.1),
         contentPadding: EdgeInsets.symmetric(vertical: 18, horizontal: 16),
       ),
       obscureText: obscureText,

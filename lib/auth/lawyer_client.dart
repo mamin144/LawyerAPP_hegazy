@@ -31,7 +31,7 @@ class ConsultationScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          // Background image with dark overlay
+          // Background image with gradient overlay
           Positioned.fill(
             child: Container(
               decoration: BoxDecoration(
@@ -41,7 +41,7 @@ class ConsultationScreen extends StatelessWidget {
                   ),
                   fit: BoxFit.cover,
                   colorFilter: ColorFilter.mode(
-                    Colors.black.withOpacity(0.8),
+                    Colors.black.withOpacity(0.7),
                     BlendMode.darken,
                   ),
                 ),
@@ -49,43 +49,7 @@ class ConsultationScreen extends StatelessWidget {
             ),
           ),
 
-          // Status bar
-          // Positioned(
-          //   top: 0,
-          //   left: 0,
-          //   right: 0,
-          //   child: Container(
-          //     padding: EdgeInsets.only(left: 20, right: 20, top: 44),
-          //     child: Row(
-          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //       children: [
-          //         Text(
-          //           '9:41',
-          //           style: TextStyle(
-          //             color: Colors.white,
-          //             fontWeight: FontWeight.w600,
-          //             fontSize: 14,
-          //           ),
-          //         ),
-          //         Row(
-          //           children: [
-          //             Icon(
-          //               Icons.signal_cellular_4_bar,
-          //               color: Colors.white,
-          //               size: 16,
-          //             ),
-          //             SizedBox(width: 5),
-          //             Icon(Icons.wifi, color: Colors.white, size: 16),
-          //             SizedBox(width: 5),
-          //             Icon(Icons.battery_full, color: Colors.white, size: 16),
-          //           ],
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // ),
-
-          // Bottom sheet
+          // Bottom sheet with modern design
           Positioned(
             left: 0,
             right: 0,
@@ -94,7 +58,14 @@ class ConsultationScreen extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 32),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 20,
+                    offset: Offset(0, -10),
+                  ),
+                ],
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -103,9 +74,10 @@ class ConsultationScreen extends StatelessWidget {
                     'More Comfortable Chat With\nthe Lawyer',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 28,
                       fontWeight: FontWeight.bold,
                       height: 1.2,
+                      color: Color(0xFF0A2F5E),
                     ),
                   ),
                   SizedBox(height: 16),
@@ -113,14 +85,18 @@ class ConsultationScreen extends StatelessWidget {
                     'Book an appointment with Lawyer. Chat with\nLawyer for Free and get consultation.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 15,
                       color: Colors.grey[600],
                       height: 1.4,
                     ),
                   ),
                   SizedBox(height: 32),
-                  ElevatedButton(
-                    onPressed: () {
+                  _buildButton(
+                    context,
+                    'Continue as Lawyer',
+                    Colors.white,
+                    Color(0xFF0A2F5E),
+                    () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -128,26 +104,14 @@ class ConsultationScreen extends StatelessWidget {
                         ),
                       );
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF0A2F5E),
-                      minimumSize: Size(double.infinity, 56),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      elevation: 0,
-                    ),
-                    child: Text(
-                      'Continue as Lawyer',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
                   ),
                   SizedBox(height: 12),
-                  OutlinedButton(
-                    onPressed: () {
+                  _buildButton(
+                    context,
+                    'Continue as User',
+                    Colors.white,
+                    Colors.grey[300]!,
+                    () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -155,56 +119,30 @@ class ConsultationScreen extends StatelessWidget {
                         ),
                       );
                     },
-                    style: OutlinedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      minimumSize: Size(double.infinity, 56),
-                      side: BorderSide(color: Colors.grey.shade300),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: Text(
-                      'Continue as User',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black87,
-                      ),
-                    ),
+                    isOutlined: true,
                   ),
-                  SizedBox(height: 12),
-                  OutlinedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const LoginScreen(),
-                        ),
-                      );
-                    },
-                    style: OutlinedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      minimumSize: Size(double.infinity, 56),
-                      side: BorderSide(color: Colors.grey.shade300),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: Text(
-                      'Already have an account?',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black87,
-                      ),
-                    ),
-                  ),
+                  // SizedBox(height: 12),
+                  // _buildButton(
+                  //   context,
+                  //   'Already have an account?',
+                  //   Colors.white,
+                  //   Colors.grey[300]!,
+                  //   () {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //         builder: (context) => const LoginScreen(),
+                  //       ),
+                  //     );
+                  //   },
+                  //   isOutlined: true,
+                  // ),
                   SizedBox(height: 16),
                   Container(
                     width: 40,
                     height: 4,
                     decoration: BoxDecoration(
-                      color: Colors.grey.shade300,
+                      color: Colors.grey[300],
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
@@ -214,6 +152,59 @@ class ConsultationScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildButton(
+    BuildContext context,
+    String text,
+    Color textColor,
+    Color backgroundColor,
+    VoidCallback onPressed, {
+    bool isOutlined = false,
+  }) {
+    return SizedBox(
+      width: double.infinity,
+      height: 56,
+      child:
+          isOutlined
+              ? OutlinedButton(
+                onPressed: onPressed,
+                style: OutlinedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  side: BorderSide(color: backgroundColor, width: 1.5),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  elevation: 0,
+                ),
+                child: Text(
+                  text,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF0A2F5E),
+                  ),
+                ),
+              )
+              : ElevatedButton(
+                onPressed: onPressed,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: backgroundColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  elevation: 0,
+                ),
+                child: Text(
+                  text,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: textColor,
+                  ),
+                ),
+              ),
     );
   }
 }

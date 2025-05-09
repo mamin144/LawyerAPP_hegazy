@@ -11,7 +11,6 @@ class Routes {
   static const String profile = '/profile';
   static const String chat = '/chat';
   static const String appointment = '/appointment';
-  static const String search = '/search';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -23,8 +22,6 @@ class Routes {
         return MaterialPageRoute(builder: (_) => const ChatPage());
       case appointment:
         return MaterialPageRoute(builder: (_) => const AppointmentPage());
-      case search:
-        return MaterialPageRoute(builder: (_) => const SearchPage());
       default:
         return MaterialPageRoute(
           builder:
@@ -597,15 +594,6 @@ class AppointmentPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(body: Center(child: Text('Appointment Page')));
-  }
-}
-
-class SearchPage extends StatelessWidget {
-  const SearchPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(body: Center(child: Text('Search Page')));
   }
 }
 

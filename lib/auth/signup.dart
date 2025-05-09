@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../main_scaffold.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'lawyer_client.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -38,8 +39,8 @@ class _LoginScreenState extends State<LoginScreen> {
         }),
       );
 
-      print('Login response status: ${response.statusCode}');
-      print('Login response body: ${response.body}');
+      // print('Login response status: ${response.statusCode}');
+      // print('Login response body: ${response.body}');
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
@@ -88,14 +89,14 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.indigo[900]),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: Colors.transparent,
+      //   elevation: 0,
+      //   leading: IconButton(
+      //     icon: Icon(Icons.arrow_back, color: Colors.indigo[900]),
+      //     onPressed: () => Navigator.of(context).pop(),
+      //   ),
+      // ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -110,22 +111,22 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Form(
               key: _formKey,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 28,
+                      horizontal: 10,
                       vertical: 36,
                     ),
                     child: Column(
-                      mainAxisSize: MainAxisSize.min,
+                      // mainAxisSize: MainAxisSize.max,
                       children: [
                         // Logo
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 24.0),
+                          padding: const EdgeInsets.only(top: 0),
                           child: Image.asset(
                             'lib/assets/23f87c5e73ae7acd01687cec25693b1766d78c51.png',
-                            height: 70,
+                            height: 220,
                             errorBuilder: (context, error, stackTrace) {
                               return const Icon(
                                 Icons.gavel,
@@ -135,44 +136,19 @@ class _LoginScreenState extends State<LoginScreen> {
                             },
                           ),
                         ),
+                        SizedBox(height: 0),
                         // Title
                         Text(
                           'Login',
                           style: TextStyle(
-                            fontSize: 36,
+                            fontSize: 45,
                             fontWeight: FontWeight.bold,
                             color: Colors.indigo[900],
                             letterSpacing: 1.2,
                           ),
                         ),
-                        const SizedBox(height: 10),
+
                         // Sign Up link
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Don't have an account? ",
-                              style: TextStyle(
-                                color: Colors.black54,
-                                fontSize: 15,
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                // TODO: Navigate to sign up screen
-                                Navigator.pushNamed(context, '/signup');
-                              },
-                              child: Text(
-                                'Sign Up',
-                                style: TextStyle(
-                                  color: Colors.indigo[700],
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
                         const SizedBox(height: 32),
                         // Error message
                         if (_errorMessage != null)
@@ -330,6 +306,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                           ),
                         ),
+
                         const SizedBox(height: 26),
                         // Divider with Or
                         Row(
@@ -361,88 +338,121 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 26),
-                        // Google button
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              elevation: 2,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                side: BorderSide(color: Color(0xFFE0E0E0)),
+                        const SizedBox(height: 22),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Don't have an account? ",
+                              style: TextStyle(
+                                color: Colors.black54,
+                                fontSize: 15,
                               ),
-                              padding: EdgeInsets.symmetric(vertical: 14),
                             ),
-                            onPressed: () {
-                              // TODO: Implement Google login
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  'assets/images/google_logo.png',
-                                  height: 22,
-                                  width: 70,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return Icon(Icons.g_mobiledata, size: 22);
-                                  },
-                                ),
-                                SizedBox(width: 12),
-                                Text(
-                                  'Continue with Google',
-                                  style: TextStyle(
-                                    color: Colors.black87,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 16,
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) =>
+                                            const LawyerConsultationApp(),
                                   ),
+                                );
+                              },
+                              child: Text(
+                                'Sign Up',
+                                style: TextStyle(
+                                  color: Colors.indigo[700],
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
                                 ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        // Facebook button
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              elevation: 2,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                side: BorderSide(color: Color(0xFFE0E0E0)),
                               ),
-                              padding: EdgeInsets.symmetric(vertical: 14),
                             ),
-                            onPressed: () {
-                              // TODO: Implement Facebook login
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  'assets/images/facebook_logo.png',
-                                  height: 22,
-                                  width: 22,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return Icon(Icons.facebook, size: 22);
-                                  },
-                                ),
-                                SizedBox(width: 12),
-                                Text(
-                                  'Continue with Facebook',
-                                  style: TextStyle(
-                                    color: Color(0xFF1877F3),
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                          ],
                         ),
+                        // const SizedBox(height: 26),
+                        // // Google button
+                        // SizedBox(
+                        //   width: double.infinity,
+                        //   child: ElevatedButton(
+                        //     style: ElevatedButton.styleFrom(
+                        //       backgroundColor: Colors.white,
+                        //       elevation: 2,
+                        //       shape: RoundedRectangleBorder(
+                        //         borderRadius: BorderRadius.circular(12),
+                        //         side: BorderSide(color: Color(0xFFE0E0E0)),
+                        //       ),
+                        //       padding: EdgeInsets.symmetric(vertical: 14),
+                        //     ),
+                        //     onPressed: () {
+                        //       // TODO: Implement Google login
+                        //     },
+                        //     child: Row(
+                        //       mainAxisAlignment: MainAxisAlignment.center,
+                        //       children: [
+                        //         Image.asset(
+                        //           'assets/images/google_logo.png',
+                        //           height: 22,
+                        //           width: 70,
+                        //           errorBuilder: (context, error, stackTrace) {
+                        //             return Icon(Icons.g_mobiledata, size: 22);
+                        //           },
+                        //         ),
+                        //         SizedBox(width: 12),
+                        //         Text(
+                        //           'Continue with Google',
+                        //           style: TextStyle(
+                        //             color: Colors.black87,
+                        //             fontWeight: FontWeight.w600,
+                        //             fontSize: 16,
+                        //           ),
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ),
+                        // ),
+                        // const SizedBox(height: 12),
+                        // // Facebook button
+                        // SizedBox(
+                        //   width: double.infinity,
+                        //   child: ElevatedButton(
+                        //     style: ElevatedButton.styleFrom(
+                        //       backgroundColor: Colors.white,
+                        //       elevation: 2,
+                        //       shape: RoundedRectangleBorder(
+                        //         borderRadius: BorderRadius.circular(12),
+                        //         side: BorderSide(color: Color(0xFFE0E0E0)),
+                        //       ),
+                        //       padding: EdgeInsets.symmetric(vertical: 14),
+                        //     ),
+                        //     onPressed: () {
+                        //       // TODO: Implement Facebook login
+                        //     },
+                        //     child: Row(
+                        //       mainAxisAlignment: MainAxisAlignment.center,
+                        //       children: [
+                        //         Image.asset(
+                        //           'assets/images/facebook_logo.png',
+                        //           height: 22,
+                        //           width: 22,
+                        //           errorBuilder: (context, error, stackTrace) {
+                        //             return Icon(Icons.facebook, size: 22);
+                        //           },
+                        //         ),
+                        //         SizedBox(width: 12),
+                        //         Text(
+                        //           'Continue with Facebook',
+                        //           style: TextStyle(
+                        //             color: Color(0xFF1877F3),
+                        //             fontWeight: FontWeight.w600,
+                        //             fontSize: 16,
+                        //           ),
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
