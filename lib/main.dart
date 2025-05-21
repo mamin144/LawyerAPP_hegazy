@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_4/Homepage.dart';
-import 'package:flutter_application_4/auth/lawyer_client.dart';
-import 'package:flutter_application_4/auth/login_as_lawyer.dart';
-import 'package:flutter_application_4/auth/signup.dart';
-
-void main() {
-  runApp(const MyApp());
-}
+import 'services/profile_service.dart';
+import 'auth/signup.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -15,7 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Lawyer Consultation App',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -33,8 +28,9 @@ class MyApp extends StatelessWidget {
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
       ),
-      home: LoginScreen(),
+      home: const LoginScreen(),
     );
   }
 }

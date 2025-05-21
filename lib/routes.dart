@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'Homepage.dart';
 import 'edit_profile.dart';
+import 'services/profile_service.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 class Routes {
   static const String home = '/';
   static const String profile = '/profile';
   static const String chat = '/chat';
   static const String appointment = '/appointment';
-  static const String search = '/search';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -19,8 +22,6 @@ class Routes {
         return MaterialPageRoute(builder: (_) => const ChatPage());
       case appointment:
         return MaterialPageRoute(builder: (_) => const AppointmentPage());
-      case search:
-        return MaterialPageRoute(builder: (_) => const SearchPage());
       default:
         return MaterialPageRoute(
           builder:
@@ -34,23 +35,131 @@ class Routes {
   }
 }
 
-// Placeholder pages - you'll need to implement these
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
   @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  final ProfileService _profileService = ProfileService();
+  Map<String, dynamic>? _profileData;
+  bool _isLoading = true;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    print('ProfilePage initState called');
+    _initializeAndLoadProfile();
+  }
+
+  Future<void> _initializeAndLoadProfile() async {
+    print('Starting profile initialization...');
+    try {
+      print('Initializing ProfileService...');
+      await ProfileService.initialize();
+
+      print('Getting token...');
+      final token = await _profileService._getToken();
+      print('Token exists: ${token != null}');
+
+      print('Getting user role...');
+      final role = await _profileService.getCurrentUserRole();
+      print('User role: $role');
+
+      print('Loading profile data...');
+      await _loadProfile();
+    } catch (e) {
+      print('Error in initialization: $e');
+      setState(() {
+        _error = e.toString();
+        _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _loadProfile() async {
+    if (!mounted) return;
+
+    setState(() {
+      _isLoading = true;
+      _error = null;
+    });
+
+    try {
+      final data = await _profileService.getProfile();
+      print('Profile data loaded successfully: $data');
+
+      if (!mounted) return;
+
+      setState(() {
+        _profileData = data;
+        _isLoading = false;
+      });
+    } catch (e) {
+      print('Error loading profile: $e');
+      if (!mounted) return;
+
+      setState(() {
+        _error = e.toString();
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return ModernArabicProfileWidget(
-      userName: 'Guy Hawkins',
-      userEmail: 'hawkins@gmail.com',
-      userImageUrl: 'https://randomuser.me/api/portraits/men/1.jpg',
-      onVerificationTap: () => print('Verification tapped'),
-      onNotificationsTap: () => print('Notifications tapped'),
-      onPaymentHistoryTap: () => print('Payment history tapped'),
-      onGeneralSettingsTap: () => print('General settings tapped'),
-      onAddressTap: () => print('Address tapped'),
-      onFaqTap: () => print('FAQ tapped'),
-      onLogoutTap: () => print('Logout tapped'),
+    print('Building ProfilePage with data: $_profileData');
+    print('Loading state: $_isLoading');
+    print('Error state: $_error');
+
+    return Scaffold(
+      body:
+          _isLoading
+              ? const Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(),
+                    SizedBox(height: 16),
+                    Text('Loading profile...'),
+                  ],
+                ),
+              )
+              : _error != null
+              ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.error_outline,
+                      size: 48,
+                      color: Colors.red,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Error: $_error',
+                      style: const TextStyle(color: Colors.red),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: _initializeAndLoadProfile,
+                      child: const Text('Retry'),
+                    ),
+                  ],
+                ),
+              )
+              : ModernArabicProfileWidget(
+                userName: _profileData?['fullName'] ?? 'Loading...',
+                userEmail: _profileData?['email'] ?? 'No email',
+                userImageUrl: _profileData?['pictureUrl'] ?? 'Not Exist',
+                phoneNumber: _profileData?['phoneNumber'] ?? '',
+                dateOfBirth: _profileData?['dateOfBirth'] ?? '',
+                isConfirmed: _profileData?['isConfiremedEmail'] ?? false,
+              ),
     );
   }
 }
@@ -59,7 +168,10 @@ class ProfilePage extends StatelessWidget {
 class ModernArabicProfileWidget extends StatelessWidget {
   final String userName;
   final String userEmail;
-  final String? userImageUrl;
+  final String userImageUrl;
+  final String phoneNumber;
+  final String dateOfBirth;
+  final bool isConfirmed;
   final VoidCallback? onVerificationTap;
   final VoidCallback? onNotificationsTap;
   final VoidCallback? onPaymentHistoryTap;
@@ -74,7 +186,10 @@ class ModernArabicProfileWidget extends StatelessWidget {
     super.key,
     required this.userName,
     required this.userEmail,
-    this.userImageUrl,
+    required this.userImageUrl,
+    required this.phoneNumber,
+    required this.dateOfBirth,
+    required this.isConfirmed,
     this.onVerificationTap,
     this.onNotificationsTap,
     this.onPaymentHistoryTap,
@@ -137,15 +252,15 @@ class ModernArabicProfileWidget extends StatelessWidget {
                   children: [
                     Container(
                       padding: const EdgeInsets.all(3),
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.white,
                         shape: BoxShape.circle,
                       ),
                       child:
-                          userImageUrl != null
+                          userImageUrl != 'Not Exist'
                               ? CircleAvatar(
                                 radius: 35,
-                                backgroundImage: NetworkImage(userImageUrl!),
+                                backgroundImage: NetworkImage(userImageUrl),
                               )
                               : CircleAvatar(
                                 radius: 35,
@@ -216,8 +331,8 @@ class ModernArabicProfileWidget extends StatelessWidget {
               ),
 
               // Section title
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+              const Padding(
+                padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
                 child: Row(
                   children: [
                     Text(
@@ -279,8 +394,8 @@ class ModernArabicProfileWidget extends StatelessWidget {
               const SizedBox(height: 20),
 
               // Section title
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+              const Padding(
+                padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
                 child: Row(
                   children: [
                     Text(
@@ -307,9 +422,9 @@ class ModernArabicProfileWidget extends StatelessWidget {
                       color: Colors.red.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: Row(
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
+                      children: [
                         Row(
                           children: [
                             Icon(Icons.logout, color: Colors.red),
@@ -347,8 +462,8 @@ class ModernArabicProfileWidget extends StatelessWidget {
               topRight: Radius.circular(25),
             ),
           ),
-          child: ClipRRect(
-            borderRadius: const BorderRadius.only(
+          child: const ClipRRect(
+            borderRadius: BorderRadius.only(
               topLeft: Radius.circular(25),
               topRight: Radius.circular(25),
             ),
@@ -422,41 +537,47 @@ class ModernArabicProfileWidget extends StatelessWidget {
   }
 }
 
-// Example usage
-class ExampleModernUsage extends StatelessWidget {
-  const ExampleModernUsage({super.key});
+// // Example usage
+// class ExampleModernUsage extends StatelessWidget {
+//   const ExampleModernUsage({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: 'Cairo', // Arabic font
-      ),
-      home: const ModernArabicProfileWidget(
-        userName: 'Guy Hawkins',
-        userEmail: 'hawkins@gmail.com',
-        userImageUrl: 'https://randomuser.me/api/portraits/men/1.jpg',
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       theme: ThemeData(
+//         fontFamily: 'Cairo', // Arabic font
+//       ),
+//       home: const ModernArabicProfileWidget(
+//         userName: 'Guy Hawkins',
+//         userEmail: 'hawkins@gmail.com',
+//         userImageUrl: 'https://randomuser.me/api/portraits/men/1.jpg',
+//         phoneNumber: '+1234567890',
+//         dateOfBirth: '2000-05-15',
+//         isConfirmed: true,
+//       ),
+//     );
+//   }
+// }
 
-class ExampleUsage extends StatelessWidget {
-  const ExampleUsage({super.key});
+// class ExampleUsage extends StatelessWidget {
+//   const ExampleUsage({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: ModernArabicProfileWidget(
-        userName: 'Guy Hawkins',
-        userEmail: 'hawkins@gmail.com',
-        userImageUrl: 'https://randomuser.me/api/portraits/men/1.jpg',
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       home: ModernArabicProfileWidget(
+//         userName: 'Guy Hawkins',
+//         userEmail: 'hawkins@gmail.com',
+//         userImageUrl: 'https://randomuser.me/api/portraits/men/1.jpg',
+//         phoneNumber: '+1234567890',
+//         dateOfBirth: '2000-05-15',
+//         isConfirmed: true,
+//       ),
+//     );
+//   }
+// }
 
 class ChatPage extends StatelessWidget {
   const ChatPage({super.key});
@@ -476,11 +597,92 @@ class AppointmentPage extends StatelessWidget {
   }
 }
 
-class SearchPage extends StatelessWidget {
-  const SearchPage({super.key});
+class ProfileService {
+  static const String _baseUrl = 'http://mohamek-legel.runasp.net/api';
+  static const String _clientProfileUrl = '$_baseUrl/ClientDashBoard/profile';
+  static const String _lawyerProfileUrl = '$_baseUrl/LawyerDashBoard/profile';
+  static const String _tokenKey = 'auth_token';
+  static const String _userTypeKey = 'user_type';
+  static SharedPreferences? _prefs;
 
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(body: Center(child: Text('Search Page')));
+  static Future<void> initialize() async {
+    _prefs = await SharedPreferences.getInstance();
+  }
+
+  Future<String?> _getToken() async {
+    return _prefs?.getString(_tokenKey);
+  }
+
+  Future<String?> _getUserType() async {
+    return _prefs?.getString(_userTypeKey);
+  }
+
+  Future<void> saveUserType(String userType) async {
+    await _prefs?.setString(_userTypeKey, userType);
+  }
+
+  Future<Map<String, dynamic>> getProfile() async {
+    try {
+      final userType = await _getUserType();
+      final baseUrl =
+          userType == 'lawyer' ? _lawyerProfileUrl : _clientProfileUrl;
+      print('Fetching profile from: $baseUrl');
+
+      final token = await _getToken();
+      if (token == null) {
+        throw Exception('No authentication token found');
+      }
+
+      final response = await http.get(
+        Uri.parse(baseUrl),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      print('Response status code: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        throw Exception('Failed to load profile: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error in getProfile: $e');
+      throw Exception('Failed to load profile: $e');
+    }
+  }
+
+  Future<String> getCurrentUserRole() async {
+    try {
+      final token = await _getToken();
+      if (token == null) {
+        throw Exception('No authentication token found');
+      }
+
+      final response = await http.get(
+        Uri.parse('$_baseUrl/Account/current-user'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final role = data['role'] ?? '';
+        await saveUserType(role.toLowerCase());
+        return role.toLowerCase();
+      } else {
+        throw Exception('Failed to get user role: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error getting user role: $e');
+      throw Exception('Failed to get user role');
+    }
   }
 }
