@@ -172,7 +172,7 @@ class _LoginAsClientState extends State<LoginAsClient> {
                     'Welcome to App',
                     style: theme.textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF0A2F5E),
+                      color: const Color(0xFF0A2F5E),
                       letterSpacing: 0.5,
                     ),
                     textAlign: TextAlign.center,
@@ -191,7 +191,7 @@ class _LoginAsClientState extends State<LoginAsClient> {
                     alignment: Alignment.center,
                     children: [
                       Container(
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
@@ -213,7 +213,7 @@ class _LoginAsClientState extends State<LoginAsClient> {
                                   ? Icon(
                                     Icons.person,
                                     size: 54,
-                                    color: Color(0xFF0A2F5E).withOpacity(0.3),
+                                    color: const Color(0xFF0A2F5E).withOpacity(0.3),
                                   )
                                   : null,
                         ),
@@ -225,7 +225,7 @@ class _LoginAsClientState extends State<LoginAsClient> {
                           onTap: _showImagePickerOptions,
                           child: Container(
                             decoration: BoxDecoration(
-                              color: Color(0xFF0A2F5E),
+                              color: const Color(0xFF0A2F5E),
                               shape: BoxShape.circle,
                               border: Border.all(color: Colors.white, width: 2),
                             ),
@@ -271,7 +271,7 @@ class _LoginAsClientState extends State<LoginAsClient> {
                         _obscurePassword
                             ? Icons.visibility_off
                             : Icons.visibility,
-                        color: Color(0xFF0A2F5E).withOpacity(0.5),
+                        color: const Color(0xFF0A2F5E).withOpacity(0.5),
                       ),
                       onPressed: () {
                         setState(() {
@@ -285,7 +285,7 @@ class _LoginAsClientState extends State<LoginAsClient> {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(14),
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(
                           color: Colors.black12,
                           blurRadius: 6,
@@ -347,7 +347,7 @@ class _LoginAsClientState extends State<LoginAsClient> {
                     height: 54,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF0A2F5E),
+                        backgroundColor: const Color(0xFF0A2F5E),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
@@ -395,7 +395,7 @@ class _LoginAsClientState extends State<LoginAsClient> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(14),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 2)),
         ],
       ),
@@ -405,7 +405,7 @@ class _LoginAsClientState extends State<LoginAsClient> {
         keyboardType: keyboardType,
         decoration: InputDecoration(
           hintText: hint,
-          prefixIcon: Icon(icon, color: Color(0xFF0A2F5E)),
+          prefixIcon: Icon(icon, color: const Color(0xFF0A2F5E)),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
             vertical: 18,

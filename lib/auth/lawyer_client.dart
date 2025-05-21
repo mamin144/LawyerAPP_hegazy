@@ -4,7 +4,7 @@ import 'package:flutter_application_4/auth/login_as_client.dart';
 import 'package:flutter_application_4/auth/login_as_lawyer.dart';
 
 void main() {
-  runApp(LawyerConsultationApp());
+  runApp(const LawyerConsultationApp());
 }
 
 class LawyerConsultationApp extends StatelessWidget {
@@ -15,10 +15,10 @@ class LawyerConsultationApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: Color(0xFF0A2F5E),
+        primaryColor: const Color(0xFF0A2F5E),
         fontFamily: 'SF Pro Display',
       ),
-      home: ConsultationScreen(),
+      home: const ConsultationScreen(),
     );
   }
 }
@@ -36,7 +36,7 @@ class ConsultationScreen extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: NetworkImage(
+                  image: const NetworkImage(
                     'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=2070&auto=format&fit=crop',
                   ),
                   fit: BoxFit.cover,
@@ -55,22 +55,24 @@ class ConsultationScreen extends StatelessWidget {
             right: 0,
             bottom: 0,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(30),
+                ),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.1),
                     blurRadius: 20,
-                    offset: Offset(0, -10),
+                    offset: const Offset(0, -10),
                   ),
                 ],
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
+                  const Text(
                     'More Comfortable Chat With\nthe Lawyer',
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -80,7 +82,7 @@ class ConsultationScreen extends StatelessWidget {
                       color: Color(0xFF0A2F5E),
                     ),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Text(
                     'Book an appointment with Lawyer. Chat with\nLawyer for Free and get consultation.',
                     textAlign: TextAlign.center,
@@ -90,22 +92,22 @@ class ConsultationScreen extends StatelessWidget {
                       height: 1.4,
                     ),
                   ),
-                  SizedBox(height: 32),
+                  const SizedBox(height: 32),
                   _buildButton(
                     context,
                     'Continue as Lawyer',
                     Colors.white,
-                    Color(0xFF0A2F5E),
+                    const Color(0xFF0A2F5E),
                     () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => LawyerSignupScreen(),
+                          builder: (context) => const LawyerSignupScreen(),
                         ),
                       );
                     },
                   ),
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
                   _buildButton(
                     context,
                     'Continue as User',
@@ -137,7 +139,7 @@ class ConsultationScreen extends StatelessWidget {
                   //   },
                   //   isOutlined: true,
                   // ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Container(
                     width: 40,
                     height: 4,
@@ -180,7 +182,7 @@ class ConsultationScreen extends StatelessWidget {
                 ),
                 child: Text(
                   text,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                     color: Color(0xFF0A2F5E),
@@ -207,4 +209,14 @@ class ConsultationScreen extends StatelessWidget {
               ),
     );
   }
+}
+
+String buildDateTimeString(String year, String month, String day, String slot) {
+  // slot is "06:00", "13:00", etc.
+  int hour = int.parse(slot.split(':')[0]);
+  String minute = slot.split(':')[1];
+  String suffix = hour >= 12 ? 'PM' : 'AM';
+  int hour12 = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour);
+  String hourStr = hour12.toString().padLeft(2, '0');
+  return "$year-$month-$day $hourStr:$minute $suffix";
 }

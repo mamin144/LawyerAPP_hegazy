@@ -98,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
       //   ),
       // ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -136,7 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             },
                           ),
                         ),
-                        SizedBox(height: 0),
+                        const SizedBox(height: 0),
                         // Title
                         Text(
                           'Login',
@@ -156,7 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             padding: const EdgeInsets.only(bottom: 16.0),
                             child: Text(
                               _errorMessage!,
-                              style: TextStyle(color: Colors.red, fontSize: 14),
+                              style: const TextStyle(color: Colors.red, fontSize: 14),
                             ),
                           ),
                         // Email
@@ -175,14 +175,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             labelText: 'Email',
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(18),
-                              borderSide: BorderSide(
+                              borderSide: const BorderSide(
                                 color: Colors.indigo,
                                 width: 0.7,
                               ),
                             ),
                             filled: true,
-                            fillColor: Color(0xFFF3F6FD),
-                            contentPadding: EdgeInsets.symmetric(
+                            fillColor: const Color(0xFFF3F6FD),
+                            contentPadding: const EdgeInsets.symmetric(
                               vertical: 18,
                               horizontal: 18,
                             ),
@@ -207,14 +207,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             labelText: 'Password',
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(18),
-                              borderSide: BorderSide(
+                              borderSide: const BorderSide(
                                 color: Colors.indigo,
                                 width: 0.7,
                               ),
                             ),
                             filled: true,
-                            fillColor: Color(0xFFF3F6FD),
-                            contentPadding: EdgeInsets.symmetric(
+                            fillColor: const Color(0xFFF3F6FD),
+                            contentPadding: const EdgeInsets.symmetric(
                               vertical: 18,
                               horizontal: 18,
                             ),
@@ -248,7 +248,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               'Remember me',
                               style: TextStyle(fontSize: 15),
                             ),
-                            Spacer(),
+                            const Spacer(),
                             GestureDetector(
                               onTap: () {
                                 // TODO: Implement forgot password
@@ -275,7 +275,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.indigo[900],
-                              padding: EdgeInsets.symmetric(vertical: 18),
+                              padding: const EdgeInsets.symmetric(vertical: 18),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(18),
                               ),
@@ -285,7 +285,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             onPressed: _isLoading ? null : _login,
                             child:
                                 _isLoading
-                                    ? SizedBox(
+                                    ? const SizedBox(
                                       height: 20,
                                       width: 20,
                                       child: CircularProgressIndicator(
@@ -296,7 +296,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             ),
                                       ),
                                     )
-                                    : Text(
+                                    : const Text(
                                       'Log In',
                                       style: TextStyle(
                                         fontSize: 19,
@@ -342,7 +342,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
+                            const Text(
                               "Don't have an account? ",
                               style: TextStyle(
                                 color: Colors.black54,
